@@ -1,9 +1,9 @@
 require('dotenv').config()
 const express = require('express')
 const mongoose = require('mongoose')
-const Wear = require('./models/Wear')
-const Item = require('./models/Item')
-const User = require('./models/User')
+const Wear = require('./models/wear')
+const Item = require('./models/item')
+const User = require('./models/user')
 
 const app = express()
 app.use(express.json())
