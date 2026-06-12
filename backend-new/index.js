@@ -1,6 +1,8 @@
 require('dotenv').config()
 const express = require('express')
 const mongoose = require('mongoose')
+const multer = require('multer')
+const { analyseItem } = require('./shoppingGuard')
 const Wear = require('./models/wear')
 const Item = require('./models/item')
 const User = require('./models/user')
@@ -69,6 +71,19 @@ app.get('/api/user/:userId', async (req, res) => {
   const user = await User.findOne({ userId: req.params.userId })
   if (!user) return res.json({ message: 'User not found' })
   res.json(user)
+})
+
+// Shopping Guard
+const upload = multer({ dest: 'uploads/' })
+app.post('/api/shopping-guard', upload.single('image'), async (req, res) => {
+  try {
+    const catalog = JSON.parse(req.body.catalog || '[]')
+    const userBodyType = req.body.bodyType || 'unknown'
+    const result = await analyseItem(req.file.path, catalog, userBodyType)
+    res.json(result)
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
 })
 
 app.get('/', (req, res) => {
