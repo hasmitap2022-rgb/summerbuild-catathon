@@ -3,6 +3,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const multer = require('multer')
 const { analyseItem } = require('./shoppingGuard')
+const { generatePackingList } = require('./packingList')
 const Wear = require('./models/wear')
 const Item = require('./models/item')
 const User = require('./models/user')
@@ -80,6 +81,17 @@ app.post('/api/shopping-guard', upload.single('image'), async (req, res) => {
     const catalog = JSON.parse(req.body.catalog || '[]')
     const userBodyType = req.body.bodyType || 'unknown'
     const result = await analyseItem(req.file.path, catalog, userBodyType)
+    res.json(result)
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+})
+
+// Packing list generator
+app.post('/api/packing-list', async (req, res) => {
+  try {
+    const { destination, duration, occasions, catalog } = req.body
+    const result = await generatePackingList({ destination, duration, occasions, catalog })
     res.json(result)
   } catch (err) {
     res.status(500).json({ error: err.message })
