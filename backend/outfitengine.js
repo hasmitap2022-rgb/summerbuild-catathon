@@ -16,8 +16,8 @@
  *   - Are weather-appropriate
  */
 
-import { chat } from '../reka/chat.js';
-import { getWeatherContext } from './weather.js';
+const { chat } = require('../reka/chat.js');
+const { getWeatherContext } = require('./weather.js');
 
 // ---------------------------------------------------------------------------
 // Formality compatibility matrix
@@ -265,7 +265,7 @@ function generateCandidates(catalog, { maxCandidates = 200 } = {}) {
  *
  * @returns {Promise<Array<{items: Array, score: number, rationale?: string}>>}
  */
-export async function suggestOutfits({
+async function suggestOutfits({
   catalog,
   mood = '',
   plans = '',
@@ -344,3 +344,5 @@ export async function suggestOutfits({
     }
   }));
 }
+
+module.exports = { suggestOutfits };
