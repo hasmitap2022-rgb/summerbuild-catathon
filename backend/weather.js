@@ -13,7 +13,7 @@
  * The outfit engine and chat module both consume this.
  */
 
-import axios from 'axios';
+const axios = require('axios');
 
 // NEA free endpoints (no auth)
 const NEA_2H_FORECAST_URL   = 'https://api-open.data.gov.sg/v2/real-time/api/two-hr-forecast';
@@ -127,7 +127,7 @@ function classifyWeather(forecast = '', tempC = 30, humidity = 80) {
  *   label: string           Human-readable label: "hot and humid", "rainy", etc.
  * }>}
  */
-export async function getWeatherContext() {
+async function getWeatherContext() {
   const now = Date.now();
 
   // Return cached result if still fresh
@@ -170,7 +170,9 @@ export async function getWeatherContext() {
  * Returns a plain English string suitable for passing to the LLM.
  * e.g. "Rainy, 28°C, 88% humidity"
  */
-export async function getWeatherString() {
+async function getWeatherString() {
   const ctx = await getWeatherContext();
   return `${ctx.forecast}, ${ctx.tempC}°C, ${ctx.humidity}% humidity`;
 }
+
+module.exports = { getWeatherContext, getWeatherString };
