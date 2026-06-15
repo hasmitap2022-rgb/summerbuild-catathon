@@ -17,13 +17,13 @@
  *   System: ffmpeg must be installed (apt install ffmpeg / brew install ffmpeg)
  */
 
-import ffmpeg from 'fluent-ffmpeg';
-import fs from 'fs';
-import path from 'path';
-import os from 'os';
-import { v4 as uuidv4 } from 'uuid';
-import axios from 'axios';
-import sharp from 'sharp';
+const ffmpeg = require('fluent-ffmpeg');
+const fs = require('fs');
+const path = require('path');
+const os = require('os');
+const { v4: uuidv4 } = require('uuid');
+const axios = require('axios');
+const sharp = require('sharp');
 
 // ---------------------------------------------------------------------------
 // Config
@@ -50,7 +50,7 @@ const DEDUP_THRESHOLD = 0.85;
  * @param {string} outputDir  Directory to write JPEG frames into
  * @returns {Promise<string[]>} Sorted list of absolute frame file paths
  */
-export async function extractFrames(videoPath, outputDir) {
+async function extractFrames(videoPath, outputDir) {
   return new Promise((resolve, reject) => {
     const pattern = path.join(outputDir, 'frame-%04d.jpg');
 
