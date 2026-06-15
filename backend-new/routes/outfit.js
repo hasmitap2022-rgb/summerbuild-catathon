@@ -1,5 +1,5 @@
 const express = require('express')
-const { suggestOutfits } = require('../backend/outfitEngine')
+const { suggestOutfits } = require('../backend/outfitengine')
 const { chat } = require('../reka/chat')
 const { getWeatherContext } = require('../backend/weather')
 const Item = require('../models/item')
