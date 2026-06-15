@@ -14,7 +14,7 @@
  * (Reka has no session memory — we manage it).
  */
 
-import axios from 'axios';
+const axios = require('axios');
 
 const REKA_API_KEY = process.env.REKA_API_KEY;
 const REKA_CHAT_URL = 'https://api.reka.ai/v1/chat';
@@ -72,7 +72,7 @@ const INTENT_PATTERNS = {
  * @param {string} message
  * @returns {'unworn'|'outfit'|'matching'|'general'}
  */
-export function detectIntent(message) {
+function detectIntent(message) {
   for (const [intent, pattern] of Object.entries(INTENT_PATTERNS)) {
     if (pattern.test(message)) return intent;
   }
@@ -95,7 +95,7 @@ export function detectIntent(message) {
  *
  * @returns {Promise<{reply: string, intent: string, updatedHistory: Array}>}
  */
-export async function chat({ userMessage, history = [], catalog, userProfile = {}, weatherContext = null }) {
+async function chat({ userMessage, history = [], catalog, userProfile = {}, weatherContext = null }) {
   const intent = detectIntent(userMessage);
 
   // Augment the user message with weather context if available and relevant
@@ -151,7 +151,7 @@ export async function chat({ userMessage, history = [], catalog, userProfile = {
  * Asks about unworn/forgotten items specifically.
  * Useful for a "Rediscover your wardrobe" button on the frontend.
  */
-export async function askAboutUnwornItems(catalog, userProfile = {}) {
+async function askAboutUnwornItems(catalog, userProfile = {}) {
   return chat({
     userMessage: "Which items in my wardrobe haven't I worn recently? Give me a short list and a reason to try each one.",
     history: [],
@@ -164,7 +164,7 @@ export async function askAboutUnwornItems(catalog, userProfile = {}) {
  * Asks for a daily outfit suggestion given context.
  * @param {Object} context  { mood, plans, weatherContext, catalog, userProfile }
  */
-export async function suggestOutfit({ mood, plans, weatherContext, catalog, userProfile }) {
+async function suggestOutfit({ mood, plans, weatherContext, catalog, userProfile }) {
   const message = [
     `Suggest a complete outfit for today.`,
     mood ? `My mood is: ${mood}.` : '',
@@ -173,3 +173,5 @@ export async function suggestOutfit({ mood, plans, weatherContext, catalog, user
 
   return chat({ userMessage: message, history: [], catalog, userProfile, weatherContext });
 }
+
+module.exports = { detectIntent, chat, askAboutUnwornItems, suggestOutfit };
