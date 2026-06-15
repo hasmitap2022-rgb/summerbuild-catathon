@@ -1,3 +1,10 @@
+const { generatePackingList } = require('./packingList')
+const Wear = require('./models/wear')
+const Item = require('./models/item')
+const User = require('./models/user')
+// ADD HERE ↓
+const sweepRouter  = require('./routes/sweep')
+const outfitRouter = require('./routes/outfit')
 require('dotenv').config()
 const express = require('express')
 const mongoose = require('mongoose')
@@ -10,6 +17,11 @@ const User = require('./models/user')
 
 const app = express()
 app.use(express.json())
+
+app.use(express.json())
+// ADD HERE ↓
+app.use('/api', sweepRouter)
+app.use('/api/outfit', outfitRouter)
 
 // Connect to MongoDB
 mongoose.connect(process.env.DB_CONNECTION)
